@@ -5,9 +5,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "README.md")) as f:
     README = f.read()
 
-requires = [
-    "boto3"
-]
+requires = ["boto3"]
 
 tests_require = [
     "pytest",  # includes virtualenv
@@ -39,6 +37,6 @@ setuptools.setup(
         "Environment :: Other Environment",
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7"
-    ]
+        "Programming Language :: Python :: 3.7",
+    ],
 )

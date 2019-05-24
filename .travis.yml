@@ -7,6 +7,9 @@ matrix:
 before_install:
     - pip install --upgrade setuptools pip
     - pip install -r requirements.txt
+    - pip install coveralls
 install: pip install -e .[testing]
 script:
   - coverage run setup.py test
+after_success:
+  - coveralls

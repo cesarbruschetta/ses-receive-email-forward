@@ -17,7 +17,7 @@ def read_spammer_file(filename: str) -> List[str]:
 
     file_path = os.path.join(config.BASE_PATH, "spammer", "%s.txt" % filename)
     with open(file_path, "r") as fp:
-        return [ l.strip() for l in fp.readlines()]
+        return [l.strip() for l in fp.readlines()]
 
 
 def decode_email(msg_str: bytes) -> str:
