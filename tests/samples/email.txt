@@ -1,0 +1,136 @@
+Return-Path: <cesarabruschetta@gmail.com>
+Received: from mail-it1-f181.google.com (mail-it1-f181.google.com [209.85.166.181])
+ by inbound-smtp.us-east-1.amazonaws.com with SMTP id bs82kksd5uhl2b598fhhro1scu3d05a39id0gdg1
+ for no-reply@helpec.com.br;
+ Tue, 23 Apr 2019 14:32:52 +0000 (UTC)
+X-SES-Spam-Verdict: PASS
+X-SES-Virus-Verdict: PASS
+Received-SPF: pass (spfCheck: domain of _spf.google.com designates 209.85.166.181 as permitted sender) client-ip=209.85.166.181; envelope-from=cesarabruschetta@gmail.com; helo=mail-it1-f181.google.com;
+Authentication-Results: amazonses.com;
+ spf=pass (spfCheck: domain of _spf.google.com designates 209.85.166.181 as permitted sender) client-ip=209.85.166.181; envelope-from=cesarabruschetta@gmail.com; helo=mail-it1-f181.google.com;
+ dkim=pass header.i=@gmail.com;
+ dmarc=pass header.from=gmail.com;
+X-SES-RECEIPT: AEFBQUFBQUFBQUFITUxhSnFUT2d2dm4yRE5kMlhpY095QjNyWEUzQkkyNDBzKzBWdjNDMGkxSUFDTXpPSTAybG9hNHRWa1l4QUgyYmlDYmJabWZqeFgvMlE5ZGVRVStVS0VNWXo5Q0kxbTJXUEkyYkV4bTlFVnJYOTZpT0d0S0lFWDk1VWcwcWlCYStWNVd2c0dWbURmcUZ0Mis2WmllU3lZOU1kT3gwbzVJUXFqWWFkK2VhcmVFMnBQNXl1Ynd4eGJFeVRJb2hUVk1jWWpSOUkrOSttY0p5VHNWcnlVZUUrQzJuUDF5d1h3SC9PNnBWa0VsWFY3d2pna0FLRUxqcDJNZTdCWDdsRDFkRWZaSkFUaVZMbFRrMEc2U2w5cHRVMDNOaEpxeFlyYUVMMTBlNExlZ0wwbVE9PQ==
+X-SES-DKIM-SIGNATURE: a=rsa-sha256; q=dns/txt; b=dr/CYYSt/mYsB8cR9juD0aEB478OZJBx8h2W6anzraUvX6jVPLrWS75sV9j3nrGwlfWU7/XngfcjwsZ5qE5pXETWO3PUBblJ5pDqzAQQOyhZ2ABCTP4KB+a9s2tFwD4WnVFQblSfJnc3NacuzudZqnGHx31EqCCUB95yk9GMIeQ=; c=relaxed/simple; s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1556029972; v=1; bh=ywQreeOkadAdZ4/Mb1zduBsKNiG1+BXALry0J1bAdw4=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;
+Received: by mail-it1-f181.google.com with SMTP id v8so2790032itf.0
+        for <no-reply@helpec.com.br>; Tue, 23 Apr 2019 07:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=K8y9wkgTIbOTc5gTsasKDdwFKtbdjtYf/L8YeKUzILo=;
+        b=p/5EzGkfWBKfWUe6UteKF5mCKaLRQZ8sbhfYJE3y0rdGMsB2dawznQYLPoU5xGJuaR
+         nm67ilof/DRMqOst0Pj9f89uK+XjEYFuhi/gJ8TFCYED+NBR0ouXQHZi1FUftsm2j0wx
+         qnXBWharE/aX8VRivSDSkLK/Dd0NoGJeVBPBWAa/3yiKwnhm6uo7tW81KxYswvyHwtjd
+         X9tlUSb952O3rH6IB21kdCebDf/UqJ6N7hTskfXSwugZtcyyaMtnr9L/6wkexSvZd4lV
+         WE8Msd8yvdnDXvFfXAzNAihx1eqpdzy5iTJmw9fbm49xVwlG/KiOp/MohoOZGj9v+1IL
+         i1Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=K8y9wkgTIbOTc5gTsasKDdwFKtbdjtYf/L8YeKUzILo=;
+        b=eqehPEGfeL0gBwPp/EjuCkddiPVXxmYKOKNJT6w9KMnvrFfbnsaqRoBoyadvWXMGEj
+         qTuHG7DF4OVYvub5N1H0nZwbp/jN6sekdAhRksw11L6ocY4CqJoKMN4TyrAoVQzgbj0A
+         8G8O0QEcIHkBXp9DWzVEHy7yp/HenGnVwoBzgF3pzuqXr3OeYtIlma2DyGDVja/xMpxD
+         SUmlneIVuhYUF1cYmVqQkpEMg44e1p6Q8misj4ZKfe28lW66uV8YbIhpsYI4ZJReDU/F
+         MiwXTTzxc3tkssN5qpHbPqoCLg0Lc27DOTgZmHQ520kBZvvU0MehTkKg1I8hujW2S/GI
+         UjAA==
+X-Gm-Message-State: APjAAAU7FtElN25DXrAG9S7wkytsfpdOR9t2Ogt1WtCy33k0cNaVJsLc
+	818YM3v/5j4c9NU5LsFanyA32Vfd6Un+FcEISnt8xZSe
+X-Google-Smtp-Source: APXvYqyvwHXb7PSGn+TbrIXD26bsNROGd4f//xSjz+sZB6sqKyfnWEguw3lcSZ09G9mEFp3B5jHeVbnF0+KJ/nXY9SE=
+X-Received: by 2002:a05:660c:202:: with SMTP id y2mr2299056itj.0.1556029971147;
+ Tue, 23 Apr 2019 07:32:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAJzr1CqRme-LcD1FEDhTafdkVKA+0+aOR65KBbFYGpNfkxfm9w@mail.gmail.com>
+In-Reply-To: <CAJzr1CqRme-LcD1FEDhTafdkVKA+0+aOR65KBbFYGpNfkxfm9w@mail.gmail.com>
+From: Cesar Augusto Bruschetta <cesarabruschetta@gmail.com>
+Date: Tue, 23 Apr 2019 11:32:42 -0300
+Message-ID: <CAJzr1CqtvvXRsUvC_ZuOex6jMEyLJcxR-n0fL4c0cBZrSAeAeA@mail.gmail.com>
+Subject: Fwd: dadda
+To: no-reply@helpec.com.br
+Content-Type: multipart/alternative; boundary="000000000000b0b0c80587337519"
+
+--000000000000b0b0c80587337519
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Cesar Augusto Bruschetta
+
++55 11 2737-3236 (Home)
+
++55 11 9 9163-1305 (Mobile)
+
+cesarabruschetta@gmail.com
+
+
+---------- Forwarded message ---------
+De: Cesar Augusto Bruschetta <cesarabruschetta@gmail.com>
+Date: dom, 21 de abr de 2019 =C3=A0s 11:15
+Subject: dadda
+To: <no-reply@helpec.com.br>
+
+
+
+ adadad
+
+Cesar Augusto Bruschetta
+
++55 11 2737-3236 (Home)
+
++55 11 9 9163-1305 (Mobile)
+
+cesarabruschetta@gmail.com
+
+--000000000000b0b0c80587337519
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br clear=3D"all"><div><div dir=3D"ltr" class=3D"gmail_sig=
+nature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><p><span style=
+=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">=C2=A0</sp=
+an></p>
+
+<p><a name=3D"SignatureSanitizer_SafeHtmlFilter__MailAutoSig"><span style=
+=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:black=
+">Cesar Augusto Bruschetta</span></a></p>
+
+<p><span style=3D"color:black;font-family:Calibri,sans-serif;font-size:11pt=
+">+55 11 2737-3236 (Home)</span><br></p><p>
+
+</p><p><span lang=3D"EN-US" style=3D"font-size:11.0pt;font-family:&quot;Cal=
+ibri&quot;,sans-serif;color:black">+55 11 9 9163-1305 (Mobile)</span><span =
+style=3D"font-size:11.5pt;font-family:&quot;Segoe UI&quot;,sans-serif;color=
+:#212121"></span></p>
+
+<p><a href=3D"mailto:cesarabruschetta@gmail.com" target=3D"_blank"><span st=
+yle=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#0=
+563c1">cesarabruschetta@gmail.com</span></a></p></div></div></div><br><br><=
+div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">---------- =
+Forwarded message ---------<br>De: <strong class=3D"gmail_sendername" dir=
+=3D"auto">Cesar Augusto Bruschetta</strong> <span dir=3D"ltr">&lt;<a href=
+=3D"mailto:cesarabruschetta@gmail.com">cesarabruschetta@gmail.com</a>&gt;</=
+span><br>Date: dom, 21 de abr de 2019 =C3=A0s 11:15<br>Subject: dadda<br>To=
+:  &lt;<a href=3D"mailto:no-reply@helpec.com.br">no-reply@helpec.com.br</a>=
+&gt;<br></div><br><br><div dir=3D"ltr"><br clear=3D"all"><div><div dir=3D"l=
+tr" class=3D"m_-4355813748859537829gmail_signature" data-smartmail=3D"gmail=
+_signature"><div dir=3D"ltr"><p><span style=3D"font-size:11.0pt;font-family=
+:&quot;Calibri&quot;,sans-serif">=C2=A0adadad</span></p>
+
+<p><a name=3D"m_-4355813748859537829_SignatureSanitizer_SafeHtmlFilter__Mai=
+lAutoSig"><span style=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,s=
+ans-serif;color:black">Cesar Augusto Bruschetta</span></a></p>
+
+<p><span style=3D"color:black;font-family:Calibri,sans-serif;font-size:11pt=
+">+55 11 2737-3236 (Home)</span><br></p><p>
+
+</p><p><span lang=3D"EN-US" style=3D"font-size:11.0pt;font-family:&quot;Cal=
+ibri&quot;,sans-serif;color:black">+55 11 9 9163-1305 (Mobile)</span><span =
+style=3D"font-size:11.5pt;font-family:&quot;Segoe UI&quot;,sans-serif;color=
+:#212121"></span></p>
+
+<p><a href=3D"mailto:cesarabruschetta@gmail.com" target=3D"_blank"><span st=
+yle=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif;color:#0=
+563c1">cesarabruschetta@gmail.com</span></a></p></div></div></div></div>
+</div></div>
+
+--000000000000b0b0c80587337519--
