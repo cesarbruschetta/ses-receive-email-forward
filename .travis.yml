@@ -5,12 +5,12 @@ matrix:
       dist: xenial
       sudo: true
 before_install:
-    - export BOTO_CONFIG=/dev/null    
+    - export BOTO_CONFIG=/dev/null
     - pip install --upgrade setuptools pip
     - pip install -r requirements-testing.txt
     - pip install coveralls
 install: pip install -e .[testing]
 script:
-  - coverage run setup.py test
+  - coverage run --source=forward_recieved_email setup.py test
 after_success:
   - coveralls
