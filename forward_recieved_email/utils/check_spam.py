@@ -5,21 +5,19 @@ import logging
 import json
 from datetime import datetime
 
-from forward_recieved_email import config
 from forward_recieved_email.utils import tools
 
 
-RE_DOMAIN = re.compile("\@(.*)$")
 logger = logging.getLogger(__name__)
 
 
-def check_email_is_spam(message_id: str, receipt: str, sender: str) -> None:
+def check_email_is_spam(message_id: str, receipt: str, sender: str, domain: str) -> None:
     """ Check if any spam check failed  """
 
     SPAMMER_DOMAINS = map(re.compile, tools.read_spammer_file("domains"))
     SPAMMER_EMAILS = map(re.compile, tools.read_spammer_file("emails"))
-    sender_domain = (RE_DOMAIN.findall(sender) or [""])[0]
-
+    sender_domain = tools.get_domain(sender)
+    
     if (
         receipt["spfVerdict"]["status"] == "FAIL"
         or receipt["dkimVerdict"]["status"] == "FAIL"
@@ -31,9 +29,9 @@ def check_email_is_spam(message_id: str, receipt: str, sender: str) -> None:
 
         send_bounce_params = {
             "OriginalMessageId": message_id,
-            "BounceSender": "mailer-daemon@{}".format(config.EMAIL_DOMAIN),
+            "BounceSender": "mailer-daemon@{}".format(str),
             "MessageDsn": {
-                "ReportingMta": "dns; {}".format(config.EMAIL_DOMAIN),
+                "ReportingMta": "dns; {}".format(str),
                 "ArrivalDate": datetime.now().isoformat(),
             },
             "BouncedRecipientInfoList": [],
@@ -48,7 +46,7 @@ def check_email_is_spam(message_id: str, receipt: str, sender: str) -> None:
         logger.info(json.dumps(send_bounce_params))
 
         try:
-            ses_client = boto3.client("ses")
+            ses_client = boto3.client("ses", region_name=config.AWS_DEFAULT_REGION)
             bounceResponse = ses_client.send_bounce(**send_bounce_params)
             logger.info(
                 "Bounce for message %s sent, bounce message ID: %s",

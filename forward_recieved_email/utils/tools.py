@@ -2,6 +2,7 @@
 import boto3
 import logging
 import os
+import re
 
 from typing import List, Dict
 from email.parser import BytesParser
@@ -10,6 +11,9 @@ from datetime import datetime
 from forward_recieved_email import config
 
 logger = logging.getLogger(__name__)
+
+
+RE_DOMAIN = re.compile("\@(.*)$")
 
 
 def read_spammer_file(filename: str) -> List[str]:
@@ -34,13 +38,17 @@ def decode_email(msg_str: bytes) -> str:
     return decoded_message
 
 
-def sed_email_to(message_id: str, subject: str, body: str) -> Dict:
+def get_domain(email):
+    """ return domain to email """
+    return (RE_DOMAIN.findall(email) or [""])[0]
+
+def sed_email_to(message_id: str, domain: str, subject: str, body: str) -> Dict:
     """ Send email to forward addresse """
 
-    ses_client = boto3.client("ses")
+    ses_client = boto3.client("ses", region_name=config.AWS_DEFAULT_REGION)
     try:
         response = ses_client.send_email(
-            Source=config.FROM_ADDRESS,
+            Source=config.FROM_ADDRESS % domain,
             Destination={"ToAddresses": config.FORWARD_ADDRESSES},
             Message={
                 "Subject": {"Data": subject},

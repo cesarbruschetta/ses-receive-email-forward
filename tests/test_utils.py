@@ -32,7 +32,7 @@ class TestUtilsTools(unittest.TestCase):
         conn = boto3.client("ses", region_name="us-east-1")
         conn.verify_email_identity(EmailAddress="no-reply@helpec.com.br")
 
-        result = tools.sed_email_to("123456789", "ASSUNTO", "MENSAGEM TEXTO")
+        result = tools.sed_email_to("123456789", "helpec.com.br", "ASSUNTO", "MENSAGEM TEXTO")
 
 
 class TestUtilsCheckSpam(unittest.TestCase):
@@ -58,4 +58,4 @@ class TestUtilsCheckSpam(unittest.TestCase):
                 "objectKey": "bs82kksd5uhl2b598fhhro1scu3d05a39id0gdg1",
             },
         }
-        check_spam.check_email_is_spam("123456789", receipt, "test@example.com")
+        check_spam.check_email_is_spam("123456789", receipt, "test@example.com", "helpec.com.br")
