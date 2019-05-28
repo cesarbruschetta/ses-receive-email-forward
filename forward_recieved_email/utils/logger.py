@@ -7,6 +7,7 @@ def configure_logger():
     l_config.dictConfig(
         {
             "version": 1,
+            'disable_existing_loggers': False,
             "formatters": {
                 "default": {
                     "format": "%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s",
@@ -21,6 +22,8 @@ def configure_logger():
                     "stream": "ext://sys.stdout",
                 }
             },
-            "root": {"level": "DEBUG", "handlers": ["console"]},
+            'root': {
+                'handlers': ['console'],
+            }
         }
     )

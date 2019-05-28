@@ -62,7 +62,6 @@ def check_email_is_spam(
             logger.error(
                 "An error occurred while sending bounce for message: %s", message_id
             )
-            logger.exception(e)
             raise e
     else:
         logger.info("Accepting message: %s", message_id)

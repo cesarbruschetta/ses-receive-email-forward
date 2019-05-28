@@ -47,7 +47,6 @@ def main_handler(event: Dict) -> None:
         logger.error(
             "An error occurred while sending bounce for message: %s", message_id
         )
-        logger.exception(e2)
         raise e2
 
     return None
