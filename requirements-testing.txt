@@ -23,7 +23,7 @@ jsondiff==1.1.2
 jsonpatch==1.23
 jsonpickle==1.2
 jsonpointer==2.0
-jsonschema==2.6.0
+jsonschema==3.0.1
 MarkupSafe==1.1.1
 mock==3.0.5
 more-itertools==7.0.0
