@@ -6,18 +6,21 @@ import json
 from datetime import datetime
 
 from forward_recieved_email.utils import tools
+from forward_recieved_email.config import settings
 
 
 logger = logging.getLogger(__name__)
 
 
-def check_email_is_spam(message_id: str, receipt: str, sender: str, domain: str) -> None:
+def check_email_is_spam(
+    message_id: str, receipt: str, sender: str, domain: str
+) -> None:
     """ Check if any spam check failed  """
 
     SPAMMER_DOMAINS = map(re.compile, tools.read_spammer_file("domains"))
     SPAMMER_EMAILS = map(re.compile, tools.read_spammer_file("emails"))
     sender_domain = tools.get_domain(sender)
-    
+
     if (
         receipt["spfVerdict"]["status"] == "FAIL"
         or receipt["dkimVerdict"]["status"] == "FAIL"
@@ -46,7 +49,7 @@ def check_email_is_spam(message_id: str, receipt: str, sender: str, domain: str)
         logger.info(json.dumps(send_bounce_params))
 
         try:
-            ses_client = boto3.client("ses", region_name=config.AWS_DEFAULT_REGION)
+            ses_client = boto3.client("ses", region_name=settings.AWS_DEFAULT_REGION)
             bounceResponse = ses_client.send_bounce(**send_bounce_params)
             logger.info(
                 "Bounce for message %s sent, bounce message ID: %s",

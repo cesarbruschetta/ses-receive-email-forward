@@ -7,6 +7,7 @@ from typing import Dict
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from forward_recieved_email.utils import logger as c_logger
+from forward_recieved_email.config import settings
 from forward_recieved_email import processing
 
 # SET LOGGER
@@ -19,9 +20,8 @@ def lambda_handler(event: Dict, context: Dict) -> None:
     """ AWS lambda start """
 
     # CHANGE LOGGER
-    level = getattr(logging, args.loglevel.upper(), "WARNING")
     logger = logging.getLogger()
-    logger.setLevel(level)
+    logger.setLevel(settings.LOGGER_LEVEL)
 
     logger.debug(json.dumps(event, indent=4))
 

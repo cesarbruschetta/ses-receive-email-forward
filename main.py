@@ -1,36 +1,9 @@
-""" module to test processing methods """
-import unittest
-import boto3
-import os
-from moto import mock_ses, mock_s3
+from lambda_function import lambda_handler
 
-from forward_recieved_email import processing
-from forward_recieved_email.config import settings
-from . import SAMPLES_PATH
+if __name__ == "__main__":
 
-
-class TestProcessingMainHandler(unittest.TestCase):
-    """ test to processing  """
-
-    @mock_ses
-    @mock_s3
-    def test_main_handler(self):
-        """ test to processing.main_handler  """
-
-        conn_ses = boto3.client("ses", region_name=settings.AWS_DEFAULT_REGION)
-        conn_ses.verify_email_identity(EmailAddress="no-reply@helpec.com.br")
-
-        conn_s3 = boto3.resource("s3", region_name=settings.AWS_DEFAULT_REGION)
-        conn_s3.create_bucket(Bucket="receive-email-forward-sns")
-        bucket = conn_s3.Bucket("receive-email-forward-sns")
-        # import pdb; pdb.set_trace()
-
-        bucket.put_object(
-            Key="bs82kksd5uhl2b598fhhro1scu3d05a39id0gdg1",
-            Body=open(os.path.join(SAMPLES_PATH, "email.txt"), "rb").read(),
-        )
-
-        event = {
+    lambda_handler(
+        {
             "Records": [
                 {
                     "EventSource": "aws:sns",
@@ -51,7 +24,6 @@ class TestProcessingMainHandler(unittest.TestCase):
                     },
                 }
             ]
-        }
-
-        result = processing.main_handler(event)
-        self.assertFalse(result)
+        },
+        {},
+    )

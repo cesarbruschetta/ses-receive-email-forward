@@ -22,7 +22,7 @@ def main_handler(event: Dict) -> None:
     message = json.loads(ses_notification["Message"])
     receipt = message["receipt"]
     sender = message["mail"]["source"]
-    destination = message["mail"]['destination'][0]
+    destination = message["mail"]["destination"][0]
     subject = message["mail"]["commonHeaders"]["subject"]
 
     domain = tools.get_domain(destination)
