@@ -10,11 +10,25 @@
 
 ### Test
 
+Command to run unit tests
 
+```
+$ python setup.py test
+```
 
 ### Configuration
 
+Environment variables for application configuration
 
+* Log Level
+```
+$ export LOGGER_LEVEL=INFO
+```
+
+* Emails to forward
+```
+$ export FORWARD_ADDRESSES="user1@example.com,user2@example.com"
+```
 
 #### Thanks to:
 
