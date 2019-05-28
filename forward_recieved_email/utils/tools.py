@@ -65,5 +65,4 @@ def sed_email_to(message_id: str, domain: str, subject: str, body: str) -> Dict:
         logger.error(
             "An error occurred while sending bounce for message: %s", message_id
         )
-        logger.exception(e1)
         raise e1
