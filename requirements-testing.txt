@@ -14,7 +14,7 @@ coverage==4.5.2
 cryptography==2.6.1
 docker==4.0.1
 docutils==0.14
-ecdsa==0.13.2
+ecdsa==0.13.3
 future==0.17.1
 idna==2.8
 Jinja2==2.10.1
