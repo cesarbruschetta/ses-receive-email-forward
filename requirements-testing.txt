@@ -20,7 +20,7 @@ idna==2.8
 Jinja2==2.10.1
 jmespath==0.9.4
 jsondiff==1.1.2
-jsonpatch==1.23
+jsonpatch==1.33
 jsonpickle==1.2
 jsonpointer==2.0
 jsonschema==2.6.0
