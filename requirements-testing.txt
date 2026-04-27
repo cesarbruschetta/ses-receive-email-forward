@@ -33,7 +33,7 @@ pluggy==0.11.0
 py==1.8.0
 pyasn1==0.4.5
 pycparser==2.19
-pytest==4.5.0
+pytest==9.0.3
 pytest-cov==2.7.1
 python-dateutil==2.8.0
 python-jose==3.0.1
