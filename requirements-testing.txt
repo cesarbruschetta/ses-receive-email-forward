@@ -40,7 +40,7 @@ python-jose==3.0.1
 pytz==2019.1
 PyYAML==5.1
 requests==2.22.0
-responses==0.10.6
+responses==0.26.0
 rsa==4.0
 s3transfer==0.2.0
 six==1.12.0
