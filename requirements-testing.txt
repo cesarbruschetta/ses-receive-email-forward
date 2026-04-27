@@ -21,7 +21,7 @@ Jinja2==2.10.1
 jmespath==0.9.4
 jsondiff==1.1.2
 jsonpatch==1.23
-jsonpickle==1.2
+jsonpickle==4.1.1
 jsonpointer==2.0
 jsonschema==2.6.0
 MarkupSafe==1.1.1
