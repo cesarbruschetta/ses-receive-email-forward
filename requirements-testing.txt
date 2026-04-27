@@ -19,7 +19,7 @@ future==0.17.1
 idna==2.8
 Jinja2==2.10.1
 jmespath==0.9.4
-jsondiff==1.1.2
+jsondiff==2.2.1
 jsonpatch==1.23
 jsonpickle==1.2
 jsonpointer==2.0
