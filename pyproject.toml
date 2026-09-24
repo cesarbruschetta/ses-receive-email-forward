@@ -1,0 +1,89 @@
+[tool.isort]
+    case_sensitive= '1'
+    use_parentheses = '1'
+    line_length = '79'
+    order_by_type = '1'
+    multi_line_output = '3'
+    include_trailing_comma = '1'
+    lines_after_imports = '2'
+    atomic = '1'
+
+[tool.black]
+    exclude = '''
+        \.pyi
+    '''
+    target-version = ['py313']
+    line-length = '79'
+    skip-string-normalization = '1'
+
+[tool.mypy]
+    ignore_missing_imports = true
+    python_version = 3.13
+
+[tool.coverage.run]
+    source = ["src/forward_received_email",]
+    omit = ["*/.local/*", "/usr/*", "*/test_*.py", "*conftest.py"]
+
+[tool.coverage.report]
+    show_missing = true
+    skip_covered = true
+
+[tool.pytest.ini_options]
+    pythonpath = ["src"]
+    testpaths = ["src/tests"]
+    python_files = ["test*.py"]
+    addopts = [
+        "-x",
+        "-vvv",
+        "--cov=./src/forward_received_email",
+        "--no-cov-on-fail",
+        "--cov-report=",
+        "--cov-report=term-missing",
+        "--cov-fail-under=50",
+        "--disable-warnings",
+        "--import-mode=importlib"
+    ]
+
+
+
+[project]
+    name = "forward-received-email"
+    version = "0.1.0"
+    description = "AWS SES Receiver e-mail forward e-mail other e-mail account"
+    authors = [
+        {name = "Cesar Augusto", email = "cesarabruschetta@gmail.com"}
+    ]
+    license = {text = "2-clause BSD"}
+    readme = "README.md"
+    requires-python = ">=3.13"
+    dependencies = [
+        "boto3 (>=1.43.101,<2.0.0)",
+        "pydantic (>=2.13.4,<3.0.0)",
+        "pydantic-settings (>=2.14.2,<3.0.0)"
+    ]
+
+[tool.poetry.requires-plugins]
+    poetry-plugin-export = ">=1.8"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.1.1"
+pytest-cov = "^7.1.0"
+black = "^26.5.1"
+isort = "^9.0.1"
+flake8 = "^7.4.1"
+mypy = "^2.3.1"
+moto = "^5.2.3"
+
+[build-system]
+    requires = ["poetry-core>=2.0.0,<3.0.0"]
+    build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+    dev = [
+        "black (>=26.5.1,<27.0.0)",
+        "isort (>=8.0.1,<9.0.0)",
+        "flake8 (>=7.3.0,<8.0.0)",
+        "mypy (>=2.3.0,<3.0.0)",
+        "pytest (>=9.1.1,<10.0.0)",
+        "pytest-cov (>=7.1.0,<8.0.0)",
+    ]
