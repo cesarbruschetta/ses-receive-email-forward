@@ -32,7 +32,7 @@ docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${TAG} .
 docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${TAG}
 ```
 
-No GitHub Actions, configure `FORWARD_ADDRESSES_JSON` como JSON, por exemplo `["destino@exemplo.com"]`. O repositório ECR é criado pelo primeiro deploy.
+No GitHub Actions, configure os secrets `FORWARD_ADDRESSES_JSON`, `SES_RECIPIENT_ADDRESSES_JSON` e `FROM_ADDRESS`. O `FORWARD_ADDRESSES_JSON` é uma lista JSON, por exemplo `["destino@exemplo.com"]`. O repositório ECR é criado pelo primeiro deploy.
 
 ## Terraform
 
