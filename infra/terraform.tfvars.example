@@ -1,12 +1,20 @@
-# Dominios/enderecos que o SES aceita receber (um ou varios)
-ses_recipient_addresses = ["domain1.com", "domain2.com"]
+# Regiao AWS
+aws_region = "us-east-1"
+
+# Nome base dos recursos
+project_name = "ses-email-forwarder"
+
+# Enderecos que o SES aceita receber (um ou varios)
+ses_recipient_addresses = ["[EMAIL]", "[EMAIL]"]
 
 # Enderecos que recebem o e-mail encaminhado (um ou varios)
-forward_addresses = ["[EMAIL]", "[EMAIL]"]
+forward_addresses = ["[EMAIL]"]
 
-# Remetente do encaminhamento. O %s (opcional) e substituido pelo dominio
-# que recebeu a mensagem. Sem %s, o endereco e usado como esta.
+# Remetente do reenvio. O %s (opcional) e substituido pelo dominio que recebeu
 from_address = "AWS Forward <no-reply@%s>"
 
+# Nivel de log do Lambda
 logger_level = "INFO"
+
+# URI da imagem do Lambda (publicada no ECR/Docker Hub)
 lambda_image_uri = "docker.io/seuusuario/ses-email-forwarder:v1.0.0"

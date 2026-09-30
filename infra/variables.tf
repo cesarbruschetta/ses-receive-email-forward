@@ -10,25 +10,9 @@ variable "project_name" {
   default     = "ses-email-forwarder"
 }
 
-variable "email_bucket_name" {
-  description = "S3 bucket used by SES to store the received email payload."
-  type        = string
-}
-
-variable "sns_topic_name" {
-  description = "SNS topic that receives SES notification messages."
-  type        = string
-}
-
-variable "ses_rule_set_name" {
-  description = "SES receipt rule set name."
-  type        = string
-}
-
 variable "ses_recipient_addresses" {
   description = "Email addresses or domains handled by the SES receipt rule."
   type        = list(string)
-  default     = ["example.com"]
 }
 
 variable "forward_addresses" {

@@ -8,7 +8,14 @@ terraform {
     }
   }
 
-  backend "s3" {}
+  backend "s3" {
+    bucket  = "prod-726337636269-project-tfstate"
+    key     = "ses-email-forwarder/terraform.tfstate"
+    region  = "us-east-1"
+    encrypt = "true"
+
+
+  }
 }
 
 provider "aws" {
