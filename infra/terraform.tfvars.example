@@ -1,0 +1,12 @@
+# Dominios/enderecos que o SES aceita receber (um ou varios)
+ses_recipient_addresses = ["domain1.com", "domain2.com"]
+
+# Enderecos que recebem o e-mail encaminhado (um ou varios)
+forward_addresses = ["[EMAIL]", "[EMAIL]"]
+
+# Remetente do encaminhamento. O %s (opcional) e substituido pelo dominio
+# que recebeu a mensagem. Sem %s, o endereco e usado como esta.
+from_address = "AWS Forward <no-reply@%s>"
+
+logger_level = "INFO"
+lambda_image_uri = "docker.io/seuusuario/ses-email-forwarder:v1.0.0"
