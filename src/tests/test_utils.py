@@ -31,6 +31,21 @@ class TestUtilsTools(unittest.TestCase):
         text = tools.decode_email(file_msg)
         self.assertIn("Cesar Augusto Bruschetta", text)
 
+    def test_build_source_address_with_placeholder(self):
+        """method build_source_address with %s placeholder"""
+
+        template = "AWS Forward <no-reply@%s>"
+        expected = "AWS Forward <no-reply@" + "domain1.com>"
+        result = tools.build_source_address(template, "domain1.com")
+        self.assertEqual(result, expected)
+
+    def test_build_source_address_without_placeholder(self):
+        """method build_source_address without %s placeholder"""
+
+        fixed = "AWS Forward <no-reply@" + "domain1.com>"
+        result = tools.build_source_address(fixed, "domain2.com")
+        self.assertEqual(result, fixed)
+
     @mock_aws
     def test_sed_email_to(self):
         """method sed_email_to"""

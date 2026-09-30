@@ -45,12 +45,25 @@ def get_domain(email: str) -> str:
     return (RE_DOMAIN.findall(email) or [""])[0]
 
 
+def build_source_address(from_address: str, domain: str) -> str:
+    """Build the sender address, replacing ``%s`` with the domain if present.
+
+    The ``FROM_ADDRESS`` may optionally contain a ``%s`` placeholder that is
+    replaced by the domain that received the message. When the placeholder is
+    absent the address is returned unchanged, so a fixed sender such as
+    ``AWS Forward <no-reply@example.com>`` also works.
+    """
+    if "%s" in from_address:
+        return from_address % domain
+    return from_address
+
+
 def sed_email_to(message_id: str, domain: str, subject: str, body: str):
     """Send the e-mail to the configured forwarding addresses."""
     ses_client = boto3.client("ses", region_name=settings.AWS_DEFAULT_REGION)
     try:
         response = ses_client.send_email(
-            Source=settings.FROM_ADDRESS % domain,
+            Source=build_source_address(settings.FROM_ADDRESS, domain),
             Destination={"ToAddresses": settings.FORWARD_ADDRESSES},
             Message={
                 "Subject": {"Data": subject},
