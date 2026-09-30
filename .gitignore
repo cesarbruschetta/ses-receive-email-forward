@@ -105,3 +105,10 @@ venv.bak/
 .vscode
 .tool-versions
 .terraform*
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl

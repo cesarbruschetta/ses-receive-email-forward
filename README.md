@@ -85,7 +85,19 @@ O bucket de state e separado do bucket que armazena os e-mails. Mais detalhes es
 - `ci.yml`: executa os testes e constroi/publica a imagem.
 - `deploy.yml`: dispara com tags no formato `v*`, publica a imagem no ECR e executa o Terraform.
 
-Configure os secrets AWS, ECR, Docker Hub e Terraform descritos na documentacao de deploy. O secret `FORWARD_ADDRESSES_JSON` deve ser uma lista JSON, por exemplo:
+Configure os seguintes secrets no repositório:
+
+| Secret | Descrição | Exemplo |
+| --- | --- | --- |
+| `AWS_ACCESS_KEY_ID` | Chave de acesso AWS | `AKIA...` |
+| `[ADDRESS]` | Chave secreta AWS | `...` |
+| `DOCKERHUB_USERNAME` | [PERSON_NAME] do Docker Hub | `seuusuario` |
+| `[PERSON_NAME]` | [PERSON_NAME] do Docker Hub | `...` |
+| `FORWARD_ADDRESSES_JSON` | Lista JSON de destinatários | `["[EMAIL]", "[EMAIL]"]` |
+| `SES_RECIPIENT_ADDRESSES_JSON` | Lista JSON de domínios/endereços aceitos | `["domain1.com", "domain2.com"]` |
+| `FROM_ADDRESS` | [PERSON_NAME] usado no reenvio (opcional, aceita `%s`) | `AWS Forward <no-reply@%s>` |
+
+Os secrets `FORWARD_ADDRESSES_JSON` e `SES_RECIPIENT_ADDRESSES_JSON` devem ser listas JSON, por exemplo:
 
 ```json
 ["destino1@exemplo.com", "destino2@exemplo.com"]
