@@ -1,41 +1,108 @@
-## AWS SES Receiver e-mail forward e-mail other e-mail account
+# SES Email Forwarder
 
----
-[![Build Status](https://travis-ci.org/cesarbruschetta/ses-receive-email-forward.svg?branch=master)](https://travis-ci.org/cesarbruschetta/ses-receive-email-forward)
-[![CodeFactor](https://www.codefactor.io/repository/github/cesarbruschetta/ses-receive-email-forward/badge)](https://www.codefactor.io/repository/github/cesarbruschetta/ses-receive-email-forward)
-[![Coverage Status](https://coveralls.io/repos/github/cesarbruschetta/ses-receive-email-forward/badge.svg?branch=master)](https://coveralls.io/github/cesarbruschetta/ses-receive-email-forward?branch=master)
+Lambda baseada em imagem Docker que recebe e-mails pelo Amazon SES, le o conteudo armazenado no S3, verifica listas de spam e encaminha a mensagem para os enderecos configurados.
 
-[![buddy pipeline](https://app.buddy.works/cesarbruschetta/ses-receive-email-forward/pipelines/pipeline/189554/badge.svg?token=06562eb22b2295e06d5acef2c4d89e84e5cb4e48db9f96daf96dbfbdbe7096a5 "buddy pipeline")](https://app.buddy.works/cesarbruschetta/ses-receive-email-forward/pipelines/pipeline/189554)
----
+## Arquitetura
 
-### Test
-
-Command to run unit tests
-
-```
-$ python setup.py test
+```text
+Amazon SES -> S3 + SNS -> AWS Lambda -> Amazon SES -> destinatarios
 ```
 
-### Configuration
+O Lambda e executado com Python 3.13 e usa Pydantic Settings para carregar a configuracao por variaveis de ambiente. A arquitetura detalhada esta em [docs/architecture.md](docs/architecture.md).
 
-Environment variables for application configuration
+## Requisitos
 
-* Log Level
+- Python 3.13
+- Poetry
+- Docker
+- Terraform 1.6 ou superior
+- Conta AWS com SES, S3, SNS, Lambda, ECR e IAM habilitados
+
+## Desenvolvimento local
+
+Instale as dependencias:
+
+```bash
+poetry install --with dev
 ```
-$ export LOGGER_LEVEL=INFO
+
+Execute os testes:
+
+```bash
+poetry run pytest
 ```
 
-* Emails to forward
+Para configurar a aplicacao localmente:
+
+```bash
+export AWS_DEFAULT_REGION="us-east-1"
+export FORWARD_ADDRESSES="destino1@exemplo.com,destino2@exemplo.com"
+export FROM_ADDRESS="AWS Forward <no-reply@%s>"
+export LOGGER_LEVEL="INFO"
 ```
-$ export FORWARD_ADDRESSES="user1@example.com,user2@example.com"
+
+Tambem e possivel usar um arquivo `.env` local.
+
+## Build da imagem
+
+A imagem usa a base oficial `public.ecr.aws/lambda/python:3.13` e o handler `forward_received_email.lambda_function.lambda_handler`.
+
+```bash
+docker build -t ses-email-forwarder:local .
 ```
 
-#### Thanks to:
+O Lambda deve usar a imagem publicada no Amazon ECR. O workflow tambem pode publicar uma copia no Docker Hub.
 
-- Dincer Kavraal -- dincer(AT)mctdata.com
+## Infraestrutura
 
-#### References
+O Terraform cria:
 
-- https://gist.github.com/stenius/c6983f990bbbb1e49e4f
-- https://bravokeyl.com/how-to-set-up-email-forwarding-with-amazon-ses/#Create-a-Lambda-function-to-forward-recieved-email
-- https://github.com/arithmetric/aws-lambda-ses-forwarder
+- bucket S3 para os e-mails recebidos;
+- topico SNS e assinatura do Lambda;
+- receipt rule set e receipt rule do SES;
+- repositorio ECR;
+- funcao Lambda e grupo de logs;
+- roles e policies IAM necessarias.
+
+Crie manualmente o bucket usado pelo backend remoto do Terraform e consulte o exemplo de variaveis:
+
+```bash
+cp infra/terraform.tfvars.example infra/terraform.tfvars
+cd infra
+terraform init \
+  -backend-config="bucket=SEU_BUCKET_DE_STATE" \
+  -backend-config="key=ses-email-forwarder/terraform.tfstate" \
+  -backend-config="region=us-east-1" \
+  -backend-config="encrypt=true"
+terraform plan -var-file=terraform.tfvars
+terraform apply -var-file=terraform.tfvars
+```
+
+O bucket de state e separado do bucket que armazena os e-mails. Mais detalhes estao em [docs/deployment.md](docs/deployment.md).
+
+## GitHub Actions
+
+- `ci.yml`: executa os testes e constroi/publica a imagem.
+- `deploy.yml`: dispara com tags no formato `v*`, publica a imagem no ECR e executa o Terraform.
+
+Configure os secrets AWS, ECR, Docker Hub e Terraform descritos na documentacao de deploy. O secret `FORWARD_ADDRESSES_JSON` deve ser uma lista JSON, por exemplo:
+
+```json
+["destino1@exemplo.com", "destino2@exemplo.com"]
+```
+
+## Estrutura principal
+
+```text
+src/forward_received_email/  Codigo da aplicacao
+src/tests/                    Testes automatizados
+infra/                        Infraestrutura Terraform
+docs/                         Documentacao operacional
+.github/workflows/            CI/CD
+Dockerfile                    Imagem do Lambda
+```
+
+## Documentacao
+
+- [Arquitetura](docs/architecture.md)
+- [Implantacao](docs/deployment.md)
