@@ -49,6 +49,37 @@ terraform apply
 
 > O apply do Terraform é executado no workflow somente quando uma tag GitHub é criada.
 
+### Permissões IAM necessárias
+
+A credencial AWS usada pelo Terraform (o usuário/role por trás de `AWS_ACCESS_KEY_ID` e `[ADDRESS]`) precisa das permissões abaixo. Uma policy pronta está em [`infra/deployer-iam-policy.json`](../infra/deployer-iam-policy.json).
+
+| Serviço | Permissões | Motivo |
+| --- | --- | --- |
+| S3 | `s3:CreateBucket`, `s3:DeleteBucket`, `s3:GetBucket*`, `s3:PutBucketPolicy`, `s3:PutBucketPublicAccessBlock`, `s3:PutBucketTagging`, `s3:DeleteObject` | Criar o bucket de e-mails, policy e public access block |
+| S3 (backend) | `s3:GetObject`, `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket` | Ler/escrever o state remoto |
+| SNS | `sns:CreateTopic`, `sns:DeleteTopic`, `sns:GetTopicAttributes`, `sns:SetTopicAttributes`, `sns:Subscribe`, `sns:Unsubscribe`, `sns:GetSubscriptionAttributes`, `sns:SetSubscriptionAttributes` | Criar tópico, policy e assinatura do Lambda |
+| SES | `ses:CreateReceiptRuleSet`, `ses:DeleteReceiptRuleSet`, `ses:DescribeReceiptRuleSet`, `ses:CreateReceiptRule`, `ses:DeleteReceiptRule`, `ses:DescribeReceiptRule`, `ses:UpdateReceiptRule`, `ses:SetActiveReceiptRuleSet`, `ses:DescribeActiveReceiptRuleSet` | Criar/ativar o receipt rule set e a rule |
+| Lambda | `lambda:CreateFunction`, `lambda:DeleteFunction`, `lambda:GetFunction*`, `lambda:UpdateFunctionCode`, `lambda:UpdateFunctionConfiguration`, `lambda:AddPermission`, `lambda:RemovePermission`, `lambda:GetPolicy`, `lambda:TagResource` | Criar a função, permissão de invocação e tags |
+| CloudWatch Logs | `logs:CreateLogGroup`, `logs:DeleteLogGroup`, `logs:DescribeLogGroups`, `logs:PutRetentionPolicy`, `logs:TagResource` | Criar o log group e definir retenção |
+| IAM | `iam:CreateRole`, `iam:DeleteRole`, `iam:GetRole`, `iam:CreatePolicy`, `iam:DeletePolicy`, `iam:GetPolicy*`, `iam:CreatePolicyVersion`, `iam:AttachRolePolicy`, `iam:DetachRolePolicy`, `iam:PassRole` | Criar a role/policy do Lambda e passá-la à função |
+| STS | `sts:GetCallerIdentity` | Usado pelo provider AWS |
+
+> O `iam:PassRole` deve ser restrito à role do Lambda (`ses-email-forwarder-lambda-role`) com a condição `iam:PassedToService = lambda.amazonaws.com`.
+
+Para criar a policy e anexá-la ao usuário de deploy:
+
+```bash
+aws iam create-policy \
+  --policy-name ses-email-forwarder-deployer \
+  --policy-document file://infra/deployer-iam-policy.json
+
+aws iam attach-user-policy \
+  --user-name SEU_USUARIO_DE_DEPLOY \
+  --policy-arn arn:aws:iam::SEU_ACCOUNT_ID:policy/ses-email-forwarder-deployer
+```
+
+> Ajuste `SEU_BUCKET_DE_STATE` e o nome do bucket de e-mails (`ses-email-forwarder-mail-receipts`) na policy conforme o seu `project_name`.
+
 ### Múltiplos domínios e destinatários
 
 Para receber em vários domínios e encaminhar para vários endereços, basta preencher as listas:

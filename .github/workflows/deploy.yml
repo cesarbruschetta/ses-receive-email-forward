@@ -59,8 +59,8 @@ jobs:
       - name: Terraform plan and apply
         env:
           TF_VAR_lambda_image_uri: ${{ needs.docker.outputs.image-tag }}
-          TF_VAR_forward_addresses: ${{ secrets.FORWARD_ADDRESSES_JSON }}
-          TF_VAR_ses_recipient_addresses: ${{ secrets.SES_RECIPIENT_ADDRESSES_JSON }}
+          TF_VAR_forward_addresses: ${{ env.FORWARD_ADDRESSES_JSON }}
+          TF_VAR_ses_recipient_addresses: ${{ env.SES_RECIPIENT_ADDRESSES_JSON }}
         run: |
           terraform -chdir=infra plan
           terraform -chdir=infra apply -auto-approve
