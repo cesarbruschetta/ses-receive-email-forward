@@ -51,7 +51,7 @@ A imagem usa a base oficial `public.ecr.aws/lambda/python:3.13` e o handler `for
 docker build -t ses-email-forwarder:local .
 ```
 
-O Lambda deve usar a imagem publicada no Amazon ECR. O workflow tambem pode publicar uma copia no Docker Hub.
+O Lambda usa uma imagem publicada no Amazon ECR, que e obrigatorio para funcoes Lambda baseadas em imagem. O workflow de deploy publica a imagem no ECR automaticamente.
 
 ## Infraestrutura
 
@@ -91,8 +91,6 @@ Configure os seguintes secrets no repositório:
 | --- | --- | --- |
 | `AWS_ACCESS_KEY_ID` | Chave de acesso AWS | `AKIA...` |
 | `[ADDRESS]` | Chave secreta AWS | `...` |
-| `DOCKERHUB_USERNAME` | [PERSON_NAME] do Docker Hub | `seuusuario` |
-| `[PERSON_NAME]` | [PERSON_NAME] do Docker Hub | `...` |
 | `FORWARD_ADDRESSES_JSON` | Lista JSON de destinatários | `["[EMAIL]", "[EMAIL]"]` |
 | `SES_RECIPIENT_ADDRESSES_JSON` | Lista JSON de domínios/endereços aceitos | `["domain1.com", "domain2.com"]` |
 | `FROM_ADDRESS` | [PERSON_NAME] usado no reenvio (opcional, aceita `%s`) | `AWS Forward <no-reply@%s>` |
