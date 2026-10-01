@@ -9,7 +9,3 @@ output "sns_topic_arn" {
 output "lambda_function_name" {
   value = aws_lambda_function.mail_forwarder.function_name
 }
-
-output "ecr_repository_url" {
-  value = aws_ecr_repository.lambda.repository_url
-}

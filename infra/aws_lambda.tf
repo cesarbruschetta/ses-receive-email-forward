@@ -1,5 +1,5 @@
 locals {
-  lambda_image_uri = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${aws_ecr_repository.lambda.name}:${var.lambda_image_tag}"
+  lambda_image_uri = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.project_name}:${var.lambda_image_tag}"
 }
 
 resource "aws_lambda_function" "mail_forwarder" {
@@ -9,7 +9,7 @@ resource "aws_lambda_function" "mail_forwarder" {
   image_uri     = local.lambda_image_uri
   timeout       = 60
   memory_size   = 512
-  architectures = ["x86_64", "arm64"]
+  architectures = ["x86_64"]
 
   environment {
     variables = {
