@@ -9,7 +9,7 @@ resource "aws_lambda_function" "mail_forwarder" {
   image_uri     = local.lambda_image_uri
   timeout       = 60
   memory_size   = 512
-  architectures = ["x86_64"]
+  architectures = ["x86_64", "arm64"]
 
   environment {
     variables = {
