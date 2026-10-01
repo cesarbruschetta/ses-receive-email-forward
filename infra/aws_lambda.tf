@@ -9,10 +9,9 @@ resource "aws_lambda_function" "mail_forwarder" {
 
   environment {
     variables = {
-      FORWARD_ADDRESSES  = join(",", var.forward_addresses)
-      AWS_DEFAULT_REGION = var.aws_region
-      FROM_ADDRESS       = var.from_address
-      LOGGER_LEVEL       = var.logger_level
+      FORWARD_ADDRESSES = join(",", var.forward_addresses)
+      FROM_ADDRESS      = var.from_address
+      LOGGER_LEVEL      = var.logger_level
     }
   }
 }
