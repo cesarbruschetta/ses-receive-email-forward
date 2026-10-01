@@ -16,5 +16,5 @@ from_address = "AWS Forward <no-reply@%s>"
 # Nivel de log do Lambda
 logger_level = "INFO"
 
-# URI da imagem do Lambda (publicada no ECR/Docker Hub)
-lambda_image_uri = "docker.io/seuusuario/ses-email-forwarder:v1.0.0"
+# Tag da imagem do Lambda no ECR
+lambda_image_tag = "latest"

@@ -32,7 +32,8 @@ variable "logger_level" {
   default     = "INFO"
 }
 
-variable "lambda_image_uri" {
-  description = "Container image URI for the Lambda function."
+variable "lambda_image_tag" {
+  description = "Container image tag for the Lambda function."
   type        = string
+  default     = "latest"
 }
