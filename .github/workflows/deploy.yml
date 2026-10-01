@@ -63,19 +63,13 @@ jobs:
         with:
           terraform_version: 1.9.8
 
-      - name: Terraform init
-        run: |
-          terraform -chdir=infra init
-
-      - name: Import ECR repository into Terraform state
-        run: |
-          terraform -chdir=infra import aws_ecr_repository.lambda ses-email-forwarder || true
-
       - name: Terraform plan and apply
         env:
           TF_VAR_lambda_image_tag: ${{ needs.docker.outputs.image-tag }}
           TF_VAR_forward_addresses: ${{ vars.FORWARD_ADDRESSES_JSON }}
           TF_VAR_ses_recipient_addresses: ${{ vars.SES_RECIPIENT_ADDRESSES_JSON }}
         run: |
+          terraform -chdir=infra init
+          terraform -chdir=infra import aws_ecr_repository.lambda ses-email-forwarder || true
           terraform -chdir=infra plan
           terraform -chdir=infra apply -auto-approve
